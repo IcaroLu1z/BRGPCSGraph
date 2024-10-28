@@ -1,6 +1,8 @@
 # Collaboration Networks in Brazilian Postgraduate Programs in Computing
 
-This repository contains the code and data used in the monograph, which explores the collaboration networks of Brazilian authors and their relationship with CAPES evaluation in the context of graduate programs in Computing in Brazil.
+This repository contains the code and data used in my monograph, which explores the collaboration networks of Brazilian authors and their relationship with CAPES evaluation in the context of graduate programs in Computing in Brazil.
+
+The full text of the monograph is available at [http://www.monografias.ufop.br/handle/35400000/7078] (available in PT-BR only).
 
 ## Overview
 
@@ -58,4 +60,34 @@ This analysis shows that geographic location and academic productivity play key 
 
 ---
 
-This study contributes to a deeper understanding of academic collaboration patterns within Brazilian Computing programs, offering practical insights for program improvement and evaluation practices.
+Cite this thesis:
+
+### English Version
+```bibtex
+@thesis{icarovasconcelos2024,
+  author = {Ícaro Luiz Lage Vasconcelos},
+  title = {Mapping Academic Connections: An Analysis of the Computer Science Researcher Network via OpenAlex},
+  year = {2024},
+  school = {Federal University of Ouro Preto},
+  type = {Monograph (Bachelors in Computer Science)},
+  address = {Ouro Preto, BR},
+  institution = {Institute of Exact and Biological Sciences},
+  url = {http://www.monografias.ufop.br/handle/35400000/7078},
+  note = {51 f.}
+}
+```
+
+#### Portuguese Version
+```bibtex
+@thesis{icarovasconcelos2024,
+  author = {Ícaro Luiz Lage Vasconcelos},
+  title = {Mapeando as Conexões Acadêmicas: Uma Análise da Rede de Pesquisadores em Ciência da Computação via OpenAlex},
+  year = {2024},
+  school = {Universidade Federal de Ouro Preto},
+  type = {Monografia (Graduação em Ciência da Computação)},
+  address = {Ouro Preto, BR},
+  institution = {Instituto de Ciências Exatas e Biológicas},
+  url = {http://www.monografias.ufop.br/handle/35400000/7078},
+  note = {51 f.}
+}
+```
