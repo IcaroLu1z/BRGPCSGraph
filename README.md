@@ -77,7 +77,7 @@ Cite this thesis:
 }
 ```
 
-#### Portuguese Version
+### Portuguese Version
 ```bibtex
 @thesis{icarovasconcelos2024,
   author = {Ícaro Luiz Lage Vasconcelos},
