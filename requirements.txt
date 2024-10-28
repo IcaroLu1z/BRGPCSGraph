@@ -1,0 +1,16 @@
+numpy
+pandas
+shap
+scikit-learn
+matplotlib
+pickle-mixin
+seaborn
+jsonlib-python3
+requests
+geopandas
+shapely
+gdown
+networkx
+node2vec
+gensim
+umap-learn

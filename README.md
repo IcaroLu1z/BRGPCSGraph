@@ -1,4 +1,4 @@
-# Collaboration Networks in Brazilian Graduate Programs in Computing
+# Collaboration Networks in Brazilian Postgraduate Programs in Computing
 
 This repository contains the code and data used in the monograph, which explores the collaboration networks of Brazilian authors and their relationship with CAPES evaluation in the context of graduate programs in Computing in Brazil.
 
@@ -16,7 +16,6 @@ The results validate the effectiveness of our approach, revealing that geographi
 ## Repository Contents
 
 - `data/`: Folder for storing data files. The dataset used in this study can be downloaded [here](https://docs.google.com/spreadsheets/d/1aDyvwiUHiDZre47Z0AOml0D7gS17mgfFFbqSJ6Svi64/export?format=csv&gid=716386560).
-- `notebooks/`: Jupyter notebooks containing the steps for data processing, node embedding generation, and pattern analysis.
 - `src/`: Scripts for preprocessing data, running Node2Vec, and applying clustering algorithms.
 - `results/`: Outputs of the analysis, including visualizations and pattern clusters.
 
@@ -40,8 +39,7 @@ pip install -r requirements.txt
 ## Usage
 
 1. **Download the Dataset**: Place the downloaded dataset in the `data/` folder.
-2. **Run Notebooks**: Open and run the Jupyter notebooks in the `notebooks/` folder to reproduce the steps in the study.
-3. **Generate Results**: Use scripts in `src/` to preprocess data, execute Node2Vec, and apply clustering methods on node embeddings.
+2. **Generate Results**: Use scripts in `src/` to preprocess data, execute Node2Vec, and apply clustering methods on node embeddings.
 
 ## Results
 
