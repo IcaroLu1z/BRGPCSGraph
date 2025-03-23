@@ -11,9 +11,9 @@ import pickle
 authors_data = pd.read_csv('/media/work/icarovasconcelos/mono/data/authors/authors-information.csv')
 model_paths = ['/media/work/icarovasconcelos/mono/results/clusters_models/ward_3cluster_a0.24_10win_50ep_2dim_100wl_25nw_1p_1q.npy',
                '/media/work/icarovasconcelos/mono/results/clusters_models/ward_4cluster_a0.24_10win_50ep_2dim_150wl_38nw_1p_1q.npy',
-                '/media/work/icarovasconcelos/mono/results/clusters_models/ward_5cluster_a0.24_10win_50ep_2dim_200wl_50nw_1p_1q.npy',
-                '/media/work/icarovasconcelos/mono/results/clusters_models/ward_6cluster_a0.24_10win_50ep_2dim_175wl_44nw_1p_1q.npy']
-              
+               '/media/work/icarovasconcelos/mono/results/clusters_models/ward_5cluster_a0.24_10win_50ep_2dim_200wl_50nw_1p_1q.npy',
+               '/media/work/icarovasconcelos/mono/results/clusters_models/ward_6cluster_a0.24_10win_50ep_2dim_175wl_44nw_1p_1q.npy']
+
 label_encoder = LabelEncoder()
 print(authors_data.head())
 print(authors_data.info())
@@ -46,8 +46,8 @@ for i, model_path in enumerate(model_paths):
     model = pickle.load(open(model_path, "rb"))
 
     # Train a Decision Tree Classifier
-    DT = DecisionTreeClassifier(random_state=42)
-    RF = RandomForestClassifier(random_state=42)
+    DT = DecisionTreeClassifier(random_state=21)
+    RF = RandomForestClassifier(random_state=21)
 
     DT.fit(authors_data_encoded, model.labels_)
     RF.fit(authors_data_encoded, model.labels_)
@@ -135,6 +135,8 @@ for i, model_path in enumerate(model_paths):
     if len(mean_shap_values_rf.shape) > 1:
     # Sum or average across the class dimension
         mean_shap_values_rf = mean_shap_values_rf.mean(axis=1)
+
+    RF_SHAPIndices = np.argsort(mean_shap_values_rf)[::-1]  # Sort by importance
         
     explainerDT = shap.TreeExplainer(DT)
     shap_values_DT = explainerDT.shap_values(authors_data_encoded)
@@ -145,17 +147,19 @@ for i, model_path in enumerate(model_paths):
     if len(mean_shap_values_DT.shape) > 1:
     # Sum or average across the class dimension
         mean_shap_values_DT = mean_shap_values_DT.mean(axis=1)
+
+    DT_SHAPIndices = np.argsort(mean_shap_values_DT)[::-1]  # Sort by importance    
     
 
     # Now the shapes should match for plotting
-    axs[i, 4].barh(range(authors_data_encoded.shape[1]), mean_shap_values_rf)
+    axs[i, 4].barh(range(authors_data_encoded.shape[1]), mean_shap_values_rf[RF_SHAPIndices], align='center')
     axs[i, 4].set_yticks(range(authors_data_encoded.shape[1]))
     axs[i, 4].set_yticklabels(authors_data_encoded.columns)
     axs[i, 4].set_title(f'RF SHAP Values - {n_clusters} clusters')
     axs[i, 4].set_xlabel('SHAP Values')
     axs[i, 4].set_ylabel('Feature')
     
-    axs5[i//2, i%2].barh(range(authors_data_encoded.shape[1]), mean_shap_values_rf)
+    axs5[i//2, i%2].barh(range(authors_data_encoded.shape[1]), mean_shap_values_rf[RF_SHAPIndices], align='center')
     axs5[i//2, i%2].set_yticks(range(authors_data_encoded.shape[1]))
     axs5[i//2, i%2].set_yticklabels(authors_data_encoded.columns)
     axs5[i//2, i%2].set_title(f'RF SHAP Values - {n_clusters} clusters', fontsize=22)
@@ -163,14 +167,14 @@ for i, model_path in enumerate(model_paths):
     axs5[i//2, i%2].set_ylabel('Feature', fontsize=18)
     axs5[i//2, i%2].tick_params(axis='both', which='major', labelsize=16)
     
-    axs[i, 5].barh(range(authors_data_encoded.shape[1]), mean_shap_values_DT)
+    axs[i, 5].barh(range(authors_data_encoded.shape[1]), mean_shap_values_DT[DT_SHAPIndices], align='center')
     axs[i, 5].set_yticks(range(authors_data_encoded.shape[1]))
     axs[i, 5].set_yticklabels(authors_data_encoded.columns)
     axs[i, 5].set_title(f'DT SHAP Values - {n_clusters} clusters')
     axs[i, 5].set_xlabel('SHAP Values')
     axs[i, 5].set_ylabel('Feature')
     
-    axs6[i//2, i%2].barh(range(authors_data_encoded.shape[1]), mean_shap_values_DT)
+    axs6[i//2, i%2].barh(range(authors_data_encoded.shape[1]), mean_shap_values_DT[DT_SHAPIndices], align='center')
     axs6[i//2, i%2].set_yticks(range(authors_data_encoded.shape[1]))
     axs6[i//2, i%2].set_yticklabels(authors_data_encoded.columns)
     axs6[i//2, i%2].set_title(f'DT SHAP Values - {n_clusters} clusters', fontsize=22)
