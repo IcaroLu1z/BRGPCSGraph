@@ -10,17 +10,21 @@ from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bo
 random_state = 42
 
 
-model_paths = ['/media/work/icarovasconcelos/mono/results/clusters_models/ward_3cluster_a0.24_10win_50ep_2dim_100wl_25nw_1p_1q.npy',
-               '/media/work/icarovasconcelos/mono/results/clusters_models/ward_4cluster_a0.24_10win_50ep_2dim_150wl_38nw_1p_1q.npy',
-               '/media/work/icarovasconcelos/mono/results/clusters_models/ward_5cluster_a0.24_10win_50ep_2dim_200wl_50nw_1p_1q.npy',
-               '/media/work/icarovasconcelos/mono/results/clusters_models/ward_6cluster_a0.24_10win_50ep_2dim_175wl_44nw_1p_1q.npy']
+model_paths = ['/media/work/icarovasconcelos/mono/data/cluster_models/Ward_2dim_100wl_k3_epochs50ep_window10win_dim2dim_walk_length100wl_num_walks25nw_silhouette0.7373691201210022_.pkl',
+                '/media/work/icarovasconcelos/mono/data/cluster_models/Ward_2dim_150wl_k4_epochs50ep_window10win_dim2dim_walk_length150wl_num_walks38nw_silhouette0.7088714241981506_.pkl',
+                '/media/work/icarovasconcelos/mono/data/cluster_models/Ward_2dim_175wl_k6_epochs50ep_window10win_dim2dim_walk_length175wl_num_walks44nw_silhouette0.5441246628761292_.pkl',
+                '/media/work/icarovasconcelos/mono/data/cluster_models/Ward_2dim_200wl_k5_epochs50ep_window10win_dim2dim_walk_length200wl_num_walks50nw_silhouette0.6310097575187683_.pkl']
               
-embeddings_path = ['/media/work/icarovasconcelos/mono/data/test_embeddings/n2v_authors_embeddings_a0.24_10win_50ep_2dim_100wl_25nw_1p_1q.npy',
-                   '/media/work/icarovasconcelos/mono/data/test_embeddings/n2v_authors_embeddings_a0.24_10win_50ep_2dim_150wl_38nw_1p_1q.npy',
-                   '/media/work/icarovasconcelos/mono/data/test_embeddings/n2v_authors_embeddings_a0.24_10win_50ep_2dim_200wl_50nw_1p_1q.npy',
-                   '/media/work/icarovasconcelos/mono/data/test_embeddings/n2v_authors_embeddings_a0.24_10win_50ep_2dim_175wl_44nw_1p_1q.npy']
+embeddings_path = ['/media/work/icarovasconcelos/mono/data/chosen_embeddings/n2v_authors_embeddings_a0.24_10win_50ep_2dim_100wl_25nw_1p_1q.npy',
+                    '/media/work/icarovasconcelos/mono/data/chosen_embeddings/n2v_authors_embeddings_a0.24_10win_50ep_2dim_150wl_38nw_1p_1q.npy',
+                    '/media/work/icarovasconcelos/mono/data/chosen_embeddings/n2v_authors_embeddings_a0.24_10win_50ep_2dim_175wl_44nw_1p_1q.npy',
+                    '/media/work/icarovasconcelos/mono/data/chosen_embeddings/n2v_authors_embeddings_a0.24_10win_50ep_2dim_200wl_50nw_1p_1q.npy']
 
 authors_data = pd.read_csv('/media/work/icarovasconcelos/mono/data/authors/authors-information.csv')
+
+# Substitute Sul, Sudeste, Centro-Oeste, Nordeste, Norte by South, Southeast, Midwest, Northeast, North
+authors_data['region'] = authors_data['region'].replace({'Sul\n': 'South', 'Sudeste\n': 'Southeast', 'Centro-oeste\n': 'Midwest', 'Nordeste\n': 'Northeast', 'Norte': 'North'})
+print(authors_data['region'].unique())
 
 model_3_k = AgglomerativeClustering(n_clusters=3, linkage='ward')
 model_4_k = AgglomerativeClustering(n_clusters=4, linkage='ward')
@@ -88,92 +92,10 @@ for model_path, model, emb, df in zip(model_paths, models, embeddings_path, dfs)
     db_score = davies_bouldin_score(embeddings, labels)
     ch_score = calinski_harabasz_score(embeddings, labels)
     
-    
     print(f'Model {n_model} - {n_labels} clusters - Silhouette Score: {s_score} - Davies Bouldin Score: {db_score} - Calinski Harabasz Score: {ch_score}')
     
     df['cluster'] = labels
 
-    # Criar uma figura com 4 subplots (2x2)
-    fig, axs = plt.subplots(2, 2, figsize=(14, 10))
-
-    # Plotar histogramas empilhados para cada atributo
-    for ax, attr in zip(axs.flatten(), attributes_hist):
-        # Criação de listas para armazenar os dados de cada cluster
-        clusters_data = [df[df['cluster'] == i][attr].values for i in range(model.n_clusters)]
-
-        # Plotar histogramas empilhados
-        ax.hist(clusters_data, bins=20, stacked=True, label=[f'Cluster {i}' for i in range(model.n_clusters)])
-        
-        # Personalizar o gráfico
-        ax.set_title(f'{attr} - {model.n_clusters} Clusters')
-        ax.set_xlabel(attr)
-        ax.set_ylabel('Número de Samples')
-        ax.legend(title='Clusters')
-
-    # Ajustar o layout para evitar sobreposição
-    plt.tight_layout()
-    plt.show()
-    plt.savefig(f'/media/work/icarovasconcelos/mono/results/analysis/histograms_{model.n_clusters}_clusters.png')
-    
-    # Plotar boxplots para cada atributo
-    fig, axs = plt.subplots(math.ceil(len(attributes_box) / 2), 2, figsize=(32, 24))
-        
-    fig.suptitle(f'Model {n_model} - Silhouette Score: {s_score}', fontsize=16)
-    
-    for i, attr in enumerate(attributes_box):
-        row = i // 2
-        col = i % 2
-        ax = axs[row, col]
-
-        # Check if the attribute is numerical or object
-        if pd.api.types.is_numeric_dtype(df[attr]):
-            # Plot boxplot for numerical attributes
-            ax.boxplot([df[df['cluster'] == i][attr].values for i in range(model.n_clusters)], showfliers=False)
-            ax.set_title(f'{attr} - {model.n_clusters} Clusters')
-            ax.set_xlabel('Clusters')
-            ax.set_ylabel(attr)            
-        else:
-            # Plot count plot (bar chart) for object/categorical attributes
-            sns.countplot(x=attr, hue='cluster', data=df, ax=ax)
-            ax.set_title(f'{attr} - {model.n_clusters} Clusters')
-            ax.set_xlabel(attr)
-            #ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
-            ax.tick_params(axis='x', rotation=45)
-            ax.set_ylabel('Número de Samples')
-
-        ax.grid(True)
-
-        plt.tight_layout()
-        plt.show()
-        plt.savefig(f'/media/work/icarovasconcelos/mono/results/analysis/boxplots_model{n_model}_clusters.png')
-
-    
-    # Calculate mean, median, and standard deviation for each cluster
-    mean = df.groupby('cluster').mean()
-    median = df.groupby('cluster').median()
-    std = df.groupby('cluster').std()
-
-    cluster_sizes = df['cluster'].value_counts().sort_index()
-    cluster_size_df = pd.DataFrame(cluster_sizes)
-
-    # Rename the column to 'Cluster Size' for clarity
-    cluster_size_df.columns = ['Cluster Size']
-
-    # Combine mean, median, and std into a single DataFrame
-    summary_stats = pd.concat([mean, median, std], keys=['Mean', 'Median', 'Std'], axis=1)
-
-    # Concatenate the cluster size with the summary statistics based on the cluster index
-    summary_stats = pd.concat([cluster_size_df, summary_stats], axis=1)
-    # Reset the display options to show all columns
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.expand_frame_repr', False)
-
-    # Print the consolidated summary statistics
-    print('\n')
-    print(summary_stats)
-    print('\n')
-    print('-' * 40)
-    
     n_model += 1
     
 coord, ax_c = plt.subplots(4, 2, figsize=(26, 16))
@@ -253,7 +175,7 @@ for i, df in enumerate(dfs):
     ax_sr[i, 0].set_xlabel('Clusters', fontsize=28)
     ax_sr[i, 0].set_ylabel('Proportion', fontsize=28)  # Label para indicar que são proporções
     ax_sr[i, 0].tick_params(axis='both', which='major', labelsize=22)
-    ax_sr[i, 0].legend(title='State', fontsize=18, title_fontsize=20)
+    ax_sr[i, 0].legend(title='State', fontsize=18, title_fontsize=20, bbox_to_anchor=(1, 1), loc='upper left')
     ax_sr[i, 0].grid(axis='y')  # Coloca grid nas linhas horizontais para facilitar a leitura
 
     # Plotando gráfico de pizza para 'region'
@@ -270,7 +192,7 @@ for i, df in enumerate(dfs):
     ax_sr[i, 1].set_xlabel('Clusters', fontsize=24)
     ax_sr[i, 1].set_ylabel('Proportion', fontsize=24)  # Label para indicar que são proporções
     ax_sr[i, 1].tick_params(axis='both', which='major', labelsize=22)
-    ax_sr[i, 1].legend(title='Region', fontsize=18, title_fontsize=20)
+    ax_sr[i, 1].legend(title='Region', fontsize=18, title_fontsize=20, bbox_to_anchor=(1, 1), loc='upper left')
     ax_sr[i, 1].grid(axis='y')  # Coloca grid apenas nas linhas horizontais
 
     # Plotando gráfico de pizza para 'institution_acr'
@@ -298,7 +220,7 @@ workCount_2yrmc.savefig(f'/media/work/icarovasconcelos/mono/results/figures/work
 plt.close(workCount_2yrmc)
 pYear_gpScore.savefig(f'/media/work/icarovasconcelos/mono/results/figures/pYear_gpScore_boxplot.png')
 plt.close(pYear_gpScore)
-state_region.savefig(f'/media/work/icarovasconcelos/mono/results/figures/state_region_boxplot.png')
+state_region.savefig(f'/media/work/icarovasconcelos/mono/results/figures/state_region_boxplot.pdf')
 plt.close(state_region)
 inst_acr.savefig(f'/media/work/icarovasconcelos/mono/results/figures/inst_boxplot.png')
 plt.close(inst_acr)
