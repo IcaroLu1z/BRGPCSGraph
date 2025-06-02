@@ -1,6 +1,5 @@
 nohup.out
 /data/backbone_embeddings
-/data/backbones
 /data/embeddings
 /data/test_embeddings
 /data/authors/authors-processed.csv
@@ -24,3 +23,9 @@ src/output.log
 results/analysis/
 results/clusters_models/
 /others/
+/results/
+/results/figures/
+data/backbones/collabNetx_backbone_a0.01.graphml
+data/backbones/collabNetx_backbone_a0.16.graphml
+data/backbones/collabNetx_backbone_a1.00.graphml
+data/backbones/collabNetx_backbone_alpha0.10.graphml
