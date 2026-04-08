@@ -1,8 +1,26 @@
 # Collaboration Networks in Brazilian Postgraduate Programs in Computing
 
-This repository contains the code and data used in my monograph, which explores the collaboration networks of Brazilian authors and their relationship with CAPES evaluation in the context of graduate programs in Computing in Brazil.
+This repository contains the code and data used in the paper **Uncovering Collaboration Patterns in Brazilian Computer Science Graduate Programs Through Network Embeddings**, publishd in the **Brazilian Workshop on Social Network Analysis and Mining (BraSNAM)**. The paper explores the collaboration networks of Brazilian authors and their relationship with CAPES evaluation in the context of graduate programs in Computing in Brazil.
 
-The full text of the monograph is available at [http://www.monografias.ufop.br/handle/35400000/7078] (available in PT-BR only).
+The full text is available at [https://sol.sbc.org.br/index.php/brasnam/article/view/36372] (available in EN only).
+
+Please, for citations, use:
+```
+@inproceedings{brasnam,
+ author = {Icaro Vasconcelos and Augusto Guilarducci and Jadson Gertrudes and Gladston Moreira and Vander Freitas and Eduardo Luz},
+ title = { Uncovering Collaboration Patterns in Brazilian Computer Science Graduate Programs Through Network Embeddings},
+ booktitle = {Anais do XIV Brazilian Workshop on Social Network Analysis and Mining},
+ location = {Maceió/AL},
+ year = {2025},
+ keywords = {},
+ issn = {2595-6094},
+ pages = {106--119},
+ publisher = {SBC},
+ address = {Porto Alegre, RS, Brasil},
+ doi = {10.5753/brasnam.2025.8840},
+ url = {https://sol.sbc.org.br/index.php/brasnam/article/view/36372}
+}
+```
 
 ## Overview
 
